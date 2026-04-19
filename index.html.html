@@ -407,6 +407,24 @@ body { font-family: var(--font-main); background: var(--fondo); color: var(--neg
 }
 .btn-copy-slack:hover { background: rgba(56,206,166,.1); }
 
+.btn-send-slack {
+  background: #4A154B; color: #fff;
+  border: 1.5px solid rgba(74,21,75,.5);
+  border-radius: var(--radius-s); padding: 11px 22px;
+  font-family: var(--font-secondary); font-size: .85rem; font-weight: 800;
+  cursor: pointer; transition: all .2s; margin-top: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.btn-send-slack:hover { background: #611f69; }
+.btn-send-slack:disabled { opacity: .55; cursor: not-allowed; }
+.slack-send-status {
+  margin-top: 10px; padding: 10px 14px; border-radius: 8px;
+  font-size: .82rem; font-weight: 700; font-family: var(--font-secondary);
+  display: none;
+}
+.slack-send-status.ok  { background: var(--verde-p); border: 1px solid rgba(56,206,166,.3); color: #1a6f56; display: block; }
+.slack-send-status.err { background: var(--rosa-p);  border: 1px solid rgba(215,29,92,.3);  color: var(--rosa); display: block; }
+
 /* ═══════════════════════════════════════════
    MÓDULO: CATEGORÍA (igual que el original)
 ═══════════════════════════════════════════ */
@@ -632,8 +650,24 @@ input:checked + .slider:before { transform: translateX(18px); }
 .module-login-card .ml-error { background: var(--rosa-p); border: 1px solid rgba(215,29,92,.2); color: var(--rosa); border-radius: 6px; padding: 9px; font-size: .8rem; font-weight: 700; margin-top: 10px; display: none; font-family: var(--font-secondary); }
 .module-login-card .ml-error.show { display: block; }
 
-/* Scrollbar */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+/* Sidebar collapsed */
+.sidebar.collapsed {
+  transform: translateX(-100%);
+}
+.main.sidebar-collapsed {
+  margin-left: 0;
+}
+.sidebar-collapse-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px;
+  border: none; background: var(--verde-p);
+  border: 1px solid rgba(56,206,166,.3);
+  border-radius: 8px; cursor: pointer;
+  font-size: 1.1rem; color: var(--negro);
+  transition: background .2s;
+  flex-shrink: 0;
+}
+.sidebar-collapse-btn:hover { background: rgba(56,206,166,.2); }
 ::-webkit-scrollbar-track { background: var(--gris-1); }
 ::-webkit-scrollbar-thumb { background: var(--verde); border-radius: 3px; }
 
@@ -1907,6 +1941,238 @@ input:checked + .slider:before { transform: translateX(18px); }
   line-height: 1.6; margin-top: 10px;
 }
 .ma-tip strong { color: var(--negro); }
+
+/* ── Buscador dentro del viewer ── */
+.ma-search-bar {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--gris-1); border: 1.5px solid var(--borde);
+  border-radius: 10px; padding: 10px 16px; margin-bottom: 20px;
+}
+.ma-search-bar input {
+  flex: 1; border: none; background: transparent;
+  font-family: var(--font-secondary); font-size: .9rem; font-weight: 600;
+  color: var(--negro); outline: none;
+}
+.ma-search-bar input::placeholder { color: var(--gris-3); }
+.ma-search-icon { font-size: 1rem; color: var(--gris-3); flex-shrink: 0; }
+.ma-search-clear {
+  background: none; border: none; cursor: pointer;
+  font-size: .8rem; color: var(--gris-3); font-family: var(--font-secondary);
+  font-weight: 700; padding: 2px 6px; border-radius: 6px;
+  transition: background .2s;
+}
+.ma-search-clear:hover { background: var(--borde); color: var(--negro); }
+.ma-search-count {
+  font-size: .72rem; font-weight: 800; color: var(--verde);
+  font-family: var(--font-secondary); white-space: nowrap;
+}
+.ma-no-results {
+  text-align: center; padding: 40px 20px;
+  font-family: var(--font-secondary); font-size: .9rem;
+  font-weight: 700; color: var(--gris-3);
+}
+
+/* ── Índice del viewer ── */
+.ma-index {
+  background: var(--blanco); border: 1.5px solid var(--borde);
+  border-radius: 12px; padding: 16px 20px; margin-bottom: 24px;
+}
+.ma-index-title {
+  font-family: var(--font-display); font-size: .95rem; letter-spacing: 1.5px;
+  color: var(--gris-4); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+}
+.ma-index-list {
+  display: flex; flex-direction: column; gap: 4px;
+}
+.ma-index-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 10px; border-radius: 8px; cursor: pointer;
+  transition: background .15s, color .15s;
+  text-decoration: none;
+}
+.ma-index-item:hover { background: var(--verde-p); }
+.ma-index-num {
+  font-family: var(--font-display); font-size: .85rem; letter-spacing: 1px;
+  color: var(--verde); width: 22px; flex-shrink: 0; text-align: center;
+}
+.ma-index-label {
+  font-family: var(--font-secondary); font-size: .82rem; font-weight: 700;
+  color: var(--negro); line-height: 1.3;
+}
+.ma-index-ico { font-size: .9rem; flex-shrink: 0; }
+
+/* highlight de búsqueda */
+.ma-highlight { background: #FEF08A; border-radius: 3px; padding: 0 2px; }
+.ma-section-hidden { display: none; }
+
+/* ═══════════════════════════════════════════
+   MÓDULO: DISPONIBILIDAD ASPIRANTES
+═══════════════════════════════════════════ */
+.da-banner {
+  display: flex; align-items: center; gap: 20px;
+  background: linear-gradient(135deg, var(--negro), var(--negro-2));
+  border-radius: 14px; padding: 22px 28px; margin-bottom: 24px;
+  box-shadow: 0 6px 28px rgba(15,17,30,.2);
+}
+.da-banner-icon { font-size: 2.8rem; flex-shrink: 0; }
+.da-banner-title { font-family: var(--font-display); font-size: 1.8rem; letter-spacing: 2px; color: var(--blanco); margin-bottom: 4px; }
+.da-banner-title span { color: var(--verde); }
+.da-banner-sub { font-family: var(--font-secondary); font-size: .8rem; font-weight: 600; color: rgba(255,255,255,.5); }
+
+/* Construcción banner */
+.da-construccion {
+  background: linear-gradient(135deg, rgba(217,119,6,.1), rgba(217,119,6,.05));
+  border: 2px solid rgba(217,119,6,.35);
+  border-radius: 14px; padding: 18px 24px;
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 26px; flex-wrap: wrap;
+}
+.da-construccion-icon { font-size: 2rem; flex-shrink: 0; }
+.da-construccion-text strong { font-family: var(--font-display); font-size: 1.1rem; letter-spacing: 1.5px; color: var(--amber); display: block; margin-bottom: 2px; }
+.da-construccion-text span { font-family: var(--font-secondary); font-size: .78rem; font-weight: 600; color: var(--gris-4); }
+.da-construccion-badge { background: var(--amber); color: var(--negro); border-radius: 999px; padding: 4px 14px; font-family: var(--font-secondary); font-size: .68rem; font-weight: 900; letter-spacing: .06em; white-space: nowrap; margin-left: auto; }
+
+/* Buscador + índice */
+.da-controls {
+  display: flex; gap: 14px; align-items: stretch; margin-bottom: 22px; flex-wrap: wrap;
+}
+.da-search-wrap { flex: 1; min-width: 220px; }
+.da-search-box {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--blanco); border: 1.5px solid var(--borde);
+  border-radius: var(--radius-s); padding: 12px 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+  transition: border-color .2s, box-shadow .2s;
+  height: 100%;
+}
+.da-search-box:focus-within { border-color: var(--verde); box-shadow: 0 0 0 3px rgba(56,206,166,.12); }
+.da-search-ico { font-size: 1rem; color: var(--gris-3); flex-shrink: 0; }
+.da-search-inp {
+  flex: 1; border: none; background: transparent; outline: none;
+  font-family: var(--font-main); font-size: .92rem; font-weight: 600; color: var(--negro);
+}
+.da-search-inp::placeholder { color: var(--gris-3); font-weight: 500; }
+.da-clear-btn {
+  background: none; border: none; cursor: pointer;
+  color: var(--gris-3); font-size: .85rem; font-weight: 700;
+  padding: 2px 6px; border-radius: 6px; transition: background .15s;
+  font-family: var(--font-secondary);
+}
+.da-clear-btn:hover { background: var(--gris-1); color: var(--negro); }
+
+/* Índice de ciudades */
+.da-index-box {
+  background: var(--blanco); border: 1.5px solid var(--borde);
+  border-radius: var(--radius-s); padding: 12px 16px;
+  min-width: 200px; max-width: 260px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.04);
+}
+.da-index-title { font-family: var(--font-secondary); font-size: .6rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; color: var(--gris-4); margin-bottom: 8px; }
+.da-index-pills { display: flex; flex-wrap: wrap; gap: 5px; max-height: 110px; overflow-y: auto; }
+.da-index-pill {
+  background: var(--gris-1); border: 1px solid var(--borde); border-radius: 999px;
+  padding: 3px 10px; font-family: var(--font-secondary); font-size: .65rem; font-weight: 800;
+  color: var(--gris-4); cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.da-index-pill:hover { background: var(--verde-p); border-color: rgba(56,206,166,.4); color: #0d7c5a; }
+
+/* Grid de ciudades */
+.da-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 18px;
+}
+@media (max-width: 700px) { .da-grid { grid-template-columns: 1fr; } }
+
+/* Tarjeta de ciudad */
+.da-city-card {
+  background: var(--blanco); border: 1.5px solid var(--borde);
+  border-radius: 14px; overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,.05);
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+.da-city-card:hover { border-color: var(--verde); box-shadow: 0 6px 24px rgba(56,206,166,.12); transform: translateY(-2px); }
+
+.da-city-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 13px 18px; background: linear-gradient(135deg, var(--negro), var(--negro-2));
+}
+.da-city-name { font-family: var(--font-display); font-size: 1.1rem; letter-spacing: 1.5px; color: var(--blanco); }
+.da-city-ico { font-size: 1.2rem; }
+
+/* Tabla de disponibilidad */
+.da-table-wrap { overflow-x: auto; }
+.da-table {
+  width: 100%; border-collapse: collapse; font-size: .8rem;
+  min-width: 360px;
+}
+.da-table thead tr { background: var(--gris-1); }
+.da-table th {
+  padding: 8px 10px; text-align: center;
+  font-family: var(--font-secondary); font-size: .6rem; font-weight: 900;
+  letter-spacing: .07em; text-transform: uppercase; color: var(--gris-4);
+  border-bottom: 2px solid var(--borde); white-space: nowrap;
+}
+.da-table th:first-child { text-align: left; min-width: 36px; }
+.da-table td {
+  padding: 8px 10px; border-bottom: 1px solid var(--borde);
+  text-align: center; vertical-align: middle;
+  font-family: var(--font-secondary); font-size: .78rem; font-weight: 600; color: var(--negro);
+}
+.da-table td:first-child { text-align: left; font-size: .7rem; }
+.da-table tbody tr:last-child td { border-bottom: none; }
+.da-table tbody tr:hover { background: var(--verde-p); }
+
+/* Header columnas de vehículo */
+.da-th-moto     { color: #0d7c5a !important; }
+.da-th-moto-b   { color: #2563EB !important; }
+.da-th-carro-b  { color: #D97706 !important; }
+.da-th-carro-e  { color: #7C3AED !important; }
+.da-th-carro-p  { color: #D71D5C !important; }
+.da-th-cam      { color: #374151 !important; }
+
+/* Celdas de cantidad */
+.da-num-cell {
+  border-radius: 8px; padding: 4px 8px; font-family: var(--font-display);
+  font-size: .95rem; letter-spacing: 1px; display: inline-block;
+  min-width: 34px; text-align: center;
+}
+.da-num-cell.has-val { background: rgba(56,206,166,.1); color: #0d7c5a; border: 1px solid rgba(56,206,166,.25); }
+.da-num-cell.zero    { background: var(--gris-1); color: var(--gris-3); border: 1px solid var(--borde); }
+.da-num-cell.pending { background: rgba(217,119,6,.1); color: var(--amber); border: 1px solid rgba(217,119,6,.2); font-size: .7rem; font-family: var(--font-secondary); letter-spacing: 0; }
+
+/* Tag de construcción en celda */
+.da-wip-tag { background: rgba(217,119,6,.1); color: var(--amber); border: 1px solid rgba(217,119,6,.2); border-radius: 6px; padding: 2px 7px; font-size: .6rem; font-weight: 900; letter-spacing: .04em; font-family: var(--font-secondary); }
+
+/* Total row */
+.da-city-foot {
+  padding: 10px 18px; background: var(--gris-1);
+  border-top: 1.5px solid var(--borde);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 6px;
+}
+.da-total-label { font-family: var(--font-secondary); font-size: .65rem; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; color: var(--gris-4); }
+.da-total-num { font-family: var(--font-display); font-size: 1.1rem; letter-spacing: 1px; color: var(--verde); }
+
+/* Barra de estado */
+.da-stats-row {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 22px;
+}
+.da-stat-chip {
+  background: var(--blanco); border: 1.5px solid var(--borde);
+  border-radius: 999px; padding: 7px 18px;
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-secondary); font-size: .78rem; font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0,0,0,.04);
+}
+.da-stat-chip .da-sc-num { font-family: var(--font-display); font-size: 1rem; letter-spacing: 1px; color: var(--verde); }
+.da-stat-chip .da-sc-lbl { color: var(--gris-4); }
+
+/* Empty */
+.da-empty { text-align: center; padding: 60px 20px; display: none; }
+.da-empty-ico { font-size: 3rem; margin-bottom: 14px; }
+.da-empty-txt { font-family: var(--font-display); font-size: 1.6rem; letter-spacing: 2px; color: var(--negro); margin-bottom: 8px; }
+.da-empty-sub { font-family: var(--font-secondary); color: var(--gris-3); font-size: .9rem; }
 </style>
 </head>
 <body>
@@ -2028,6 +2294,14 @@ input:checked + .slider:before { transform: translateX(18px); }
         </div>
       </div>
 
+      <!-- DISPONIBILIDAD ASPIRANTES -->
+      <div class="nav-item">
+        <div class="nav-item-header" onclick="navigateTo('disponibilidad-aspirantes', this)">
+          <span class="nav-icon">🧑‍✈️</span>
+          <span class="nav-label">Disponibilidad Aspirantes</span>
+        </div>
+      </div>
+
       <!-- MATERIAL DE APOYO -->
       <div class="nav-item">
         <div class="nav-item-header" onclick="navigateTo('material-apoyo', this)">
@@ -2062,6 +2336,7 @@ input:checked + .slider:before { transform: translateX(18px); }
   <main class="main">
 
     <div class="topbar">
+      <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" onclick="toggleSidebarCollapse()" title="Ocultar/Mostrar menú">☰</button>
       <button class="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
       <div class="topbar-title" id="topbarTitle">Panel Principal</div>
       <div class="topbar-badge" id="topbarBadge">Admin CX</div>
@@ -2535,13 +2810,20 @@ input:checked + .slider:before { transform: translateX(18px); }
         </div>
 
         <div id="rs-preview-block" style="display:none;">
-          <div class="reporte-title" style="margin-top:20px;">Vista Previa — Slack</div>
+          <div class="reporte-title" style="margin-top:20px;">Vista Previa — Enviado a Slack</div>
           <div class="slack-preview" id="rs-preview"></div>
-          <button class="btn-copy-slack" onclick="copiarSlack()">📋 Copiar para Slack</button>
+          <div class="slack-send-status" id="slack-send-status"></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px;">
+            <button class="btn-copy-slack" style="margin-top:0" onclick="copiarSlack()">📋 Copiar texto</button>
+            <button class="btn-send-slack" id="btn-send-slack" onclick="enviarASlack()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>
+              Reenviar a Slack
+            </button>
+          </div>
         </div>
 
         <div class="btn-row">
-          <button class="btn-export-pdf" onclick="generarSlackPreview()">👁️ Generar Vista Previa</button>
+          <button class="btn-export-pdf" onclick="generarSlackPreview()">📤 Generar y Enviar a Slack</button>
           <button class="btn-export-pdf" onclick="exportarReportePDF('slack')">⬇️ Exportar PDF</button>
           <button class="btn-clear-form" onclick="limpiarReporte('rs')">🗑️ Limpiar</button>
         </div>
@@ -3196,6 +3478,7 @@ input:checked + .slider:before { transform: translateX(18px); }
             <button class="dsp-tgl" onclick="dspSetStatusFilter('ON',this)">Solo activas</button>
             <button class="dsp-tgl" onclick="dspSetStatusFilter('OFF',this)">Solo inactivas</button>
           </div>
+          <button id="dsp-export-btn" onclick="dspExportarExcel()" style="display:none;margin-left:auto;background:var(--negro-2);color:var(--verde);border:1.5px solid rgba(56,206,166,.2);border-radius:9px;padding:8px 18px;font-family:var(--font-secondary);font-size:.82rem;font-weight:800;cursor:pointer;transition:background .2s;align-items:center;gap:7px">⬇️ Exportar Excel</button>
         </div>
 
         <!-- Cards -->
@@ -3238,7 +3521,7 @@ input:checked + .slider:before { transform: translateX(18px); }
               <div class="ma-card-ico">💰</div>
               <div>
                 <div class="ma-card-name">Liquidaciones e Incidencias</div>
-                <div class="ma-card-desc">Paso a paso para entender liquidaciones, cortes de pago, ajustes y tipos de incidencias.</div>
+                <div class="ma-card-desc">Cortes de pago, ajustes, tipos de incidencias y movimientos en wallet.</div>
               </div>
             </div>
             <div class="ma-card-topics">
@@ -3253,7 +3536,7 @@ input:checked + .slider:before { transform: translateX(18px); }
             <button class="ma-btn-ver" onclick="maVerGuia('liquidaciones')">📖 Ver Guía</button>
           </div>
 
-          <!-- Supply — ACTIVO -->
+          <!-- Supply -->
           <div class="ma-card ma-card-green">
             <div class="ma-card-header">
               <div class="ma-card-ico">🚗</div>
@@ -3275,6 +3558,153 @@ input:checked + .slider:before { transform: translateX(18px); }
             <button class="ma-btn-ver" onclick="maVerGuia('supply')">📖 Ver Guía</button>
           </div>
 
+          <!-- ECR -->
+          <div class="ma-card ma-card-green">
+            <div class="ma-card-header">
+              <div class="ma-card-ico">🚀</div>
+              <div>
+                <div class="ma-card-name">Emprende con Ridery</div>
+                <div class="ma-card-desc">Cómo identificar conductores ECR, vehículos asociados, señales en wallet y situaciones frecuentes.</div>
+              </div>
+            </div>
+            <div class="ma-card-topics">
+              <span class="ma-topic">Vehículos ECR</span>
+              <span class="ma-topic">Señales en Wallet</span>
+              <span class="ma-topic">Situaciones Frecuentes</span>
+            </div>
+            <button class="ma-btn-ver" onclick="maVerGuia('ecr')">📖 Ver Guía</button>
+          </div>
+
+          <!-- Zendesk -->
+          <div class="ma-card ma-card-green">
+            <div class="ma-card-header">
+              <div class="ma-card-ico">🎫</div>
+              <div>
+                <div class="ma-card-name">Zendesk</div>
+                <div class="ma-card-desc">Plataforma de gestión de tickets: transferencias, notas internas, comandos y buenas prácticas.</div>
+              </div>
+            </div>
+            <div class="ma-card-topics">
+              <span class="ma-topic">Transferencias</span>
+              <span class="ma-topic">Notas Internas</span>
+              <span class="ma-topic">Gestión de Tickets</span>
+              <span class="ma-topic">Buenas Prácticas</span>
+            </div>
+            <button class="ma-btn-ver" onclick="maVerGuia('zendesk')">📖 Ver Guía</button>
+          </div>
+
+          <!-- Recálculos -->
+          <div class="ma-card ma-card-green">
+            <div class="ma-card-header">
+              <div class="ma-card-ico">🔄</div>
+              <div>
+                <div class="ma-card-name">Recálculos — Guía Paso a Paso</div>
+                <div class="ma-card-desc">Cómo validar y gestionar recálculos a favor del conductor o del cliente usando Dispatcher y Calculadora.</div>
+              </div>
+            </div>
+            <div class="ma-card-topics">
+              <span class="ma-topic">Dispatcher</span>
+              <span class="ma-topic">Surge</span>
+              <span class="ma-topic">Multiparada</span>
+              <span class="ma-topic">A favor conductor</span>
+              <span class="ma-topic">A favor cliente</span>
+            </div>
+            <button class="ma-btn-ver" onclick="maVerGuia('recalculos')">📖 Ver Guía</button>
+          </div>
+
+          <!-- Payment Under Review -->
+          <div class="ma-card ma-card-green">
+            <div class="ma-card-header">
+              <div class="ma-card-ico">🔍</div>
+              <div>
+                <div class="ma-card-name">Viajes Payment Under Review</div>
+                <div class="ma-card-desc">Qué son los viajes PUR, cómo gestionarlos, plantillas para conductores y usuarios afectados.</div>
+              </div>
+            </div>
+            <div class="ma-card-topics">
+              <span class="ma-topic">KM0</span>
+              <span class="ma-topic">Recorrido incorrecto</span>
+              <span class="ma-topic">Plantillas</span>
+              <span class="ma-topic">Real KM vs KM Traveled</span>
+            </div>
+            <button class="ma-btn-ver" onclick="maVerGuia('pur')">📖 Ver Guía</button>
+          </div>
+
+          <!-- Reporte Fraude -->
+          <div class="ma-card ma-card-green">
+            <div class="ma-card-header">
+              <div class="ma-card-ico">🚨</div>
+              <div>
+                <div class="ma-card-name">Reporte de Posible Fraude</div>
+                <div class="ma-card-desc">Cómo reportar casos de fraude y viajes PUR liberados que el conductor indica no haber realizado.</div>
+              </div>
+            </div>
+            <div class="ma-card-topics">
+              <span class="ma-topic">Posible Fraude</span>
+              <span class="ma-topic">PUR Liberados</span>
+              <span class="ma-topic">Flujo de Trabajo</span>
+              <span class="ma-topic">Evidencias</span>
+            </div>
+            <button class="ma-btn-ver" onclick="maVerGuia('fraude')">📖 Ver Guía</button>
+          </div>
+
+          <!-- FAQ Entre Equipos -->
+          <div class="ma-card ma-card-green">
+            <div class="ma-card-header">
+              <div class="ma-card-ico">🤔</div>
+              <div>
+                <div class="ma-card-name">Preguntas Frecuentes — Entre Equipos</div>
+                <div class="ma-card-desc">Las dudas más comunes del canal #entre-equipos: tickets, transferencias, disputas, WhatsApp y más.</div>
+              </div>
+            </div>
+            <div class="ma-card-topics">
+              <span class="ma-topic">Gestión de Tickets</span>
+              <span class="ma-topic">Transferencias</span>
+              <span class="ma-topic">Disputas</span>
+              <span class="ma-topic">WhatsApp</span>
+              <span class="ma-topic">Breaks</span>
+            </div>
+            <button class="ma-btn-ver" onclick="maVerGuia('faq')">📖 Ver Guía</button>
+          </div>
+
+          <!-- ARC City -->
+          <div class="ma-card ma-card-green">
+            <div class="ma-card-header">
+              <div class="ma-card-ico">⛑️</div>
+              <div>
+                <div class="ma-card-name">ARC City — Emergencias por Estado</div>
+                <div class="ma-card-desc">Directorio de números de emergencia organizados por ciudad para respaldar a conductores en la vía.</div>
+              </div>
+            </div>
+            <div class="ma-card-topics">
+              <span class="ma-topic">Bomberos</span>
+              <span class="ma-topic">Protección Civil</span>
+              <span class="ma-topic">VEN 911</span>
+              <span class="ma-topic">Cruz Roja</span>
+              <span class="ma-topic">Seguros Venezuela</span>
+            </div>
+            <button class="ma-btn-ver" onclick="maVerGuia('arc')">📖 Ver Guía</button>
+          </div>
+
+          <!-- Plantillas ARC -->
+          <div class="ma-card ma-card-green">
+            <div class="ma-card-header">
+              <div class="ma-card-ico">📝</div>
+              <div>
+                <div class="ma-card-name">Plantillas ARC — Casos SOS</div>
+                <div class="ma-card-desc">Scripts y plantillas para atender casos de accidente, SOS, robos e incidentes de seguridad.</div>
+              </div>
+            </div>
+            <div class="ma-card-topics">
+              <span class="ma-topic">Saludo de Oro</span>
+              <span class="ma-topic">Alerta SOS</span>
+              <span class="ma-topic">Reporte de Robo</span>
+              <span class="ma-topic">Seguro y Docs</span>
+              <span class="ma-topic">ECR en emergencia</span>
+            </div>
+            <button class="ma-btn-ver" onclick="maVerGuia('plantillas_arc')">📖 Ver Guía</button>
+          </div>
+
           <!-- Próximamente: Payment -->
           <div class="ma-card ma-card-pending">
             <div class="ma-card-header">
@@ -3282,18 +3712,6 @@ input:checked + .slider:before { transform: translateX(18px); }
               <div>
                 <div class="ma-card-name">Guía Payment</div>
                 <div class="ma-card-desc">Métodos de pago, validación de transacciones, billetera digital y disputas.</div>
-              </div>
-            </div>
-            <div class="ma-pending-badge">⏳ Próximamente</div>
-          </div>
-
-          <!-- Próximamente: Fraude -->
-          <div class="ma-card ma-card-pending">
-            <div class="ma-card-header">
-              <div class="ma-card-ico">🚨</div>
-              <div>
-                <div class="ma-card-name">Guía Fraude</div>
-                <div class="ma-card-desc">Detección de patrones fraudulentos, reporte y escalación de casos.</div>
               </div>
             </div>
             <div class="ma-pending-badge">⏳ Próximamente</div>
@@ -3311,23 +3729,6 @@ input:checked + .slider:before { transform: translateX(18px); }
             <div class="ma-pending-badge">⏳ Próximamente</div>
           </div>
 
-          <!-- Emprende con Ridery — ACTIVO -->
-          <div class="ma-card ma-card-green">
-            <div class="ma-card-header">
-              <div class="ma-card-ico">🚀</div>
-              <div>
-                <div class="ma-card-name">Emprende con Ridery</div>
-                <div class="ma-card-desc">Cómo identificar conductores ECR, vehículos asociados, señales en wallet y situaciones frecuentes.</div>
-              </div>
-            </div>
-            <div class="ma-card-topics">
-              <span class="ma-topic">Vehículos ECR</span>
-              <span class="ma-topic">Señales en Wallet</span>
-              <span class="ma-topic">Situaciones Frecuentes</span>
-            </div>
-            <button class="ma-btn-ver" onclick="maVerGuia('ecr')">📖 Ver Guía</button>
-          </div>
-
           <!-- Próximamente: Pronts -->
           <div class="ma-card ma-card-pending">
             <div class="ma-card-header">
@@ -3340,15 +3741,92 @@ input:checked + .slider:before { transform: translateX(18px); }
             <div class="ma-pending-badge">⏳ Próximamente</div>
           </div>
 
-        </div>
 
+        </div>
         <!-- Viewer de guía -->
         <div class="ma-viewer" id="ma-viewer" style="display:none">
           <div class="ma-viewer-header">
             <button class="ma-btn-back" onclick="maCloseViewer()">← Volver</button>
             <div class="ma-viewer-title" id="ma-viewer-title"></div>
           </div>
-          <div class="ma-viewer-body" id="ma-viewer-body"></div>
+          <div class="ma-viewer-body" id="ma-viewer-body">
+            <!-- Buscador -->
+            <div class="ma-search-bar">
+              <span class="ma-search-icon">🔍</span>
+              <input type="text" id="ma-search-inp" placeholder="Buscar en esta guía..." oninput="maSearch()" autocomplete="off">
+              <span class="ma-search-count" id="ma-search-count" style="display:none"></span>
+              <button class="ma-search-clear" id="ma-search-clear" onclick="maSearchClear()" style="display:none">✕ Limpiar</button>
+            </div>
+            <!-- Índice -->
+            <div class="ma-index" id="ma-index">
+              <div class="ma-index-title">📑 Índice de contenido</div>
+              <div class="ma-index-list" id="ma-index-list"></div>
+            </div>
+            <!-- Secciones -->
+            <div id="ma-sections-container"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════
+         DISPONIBILIDAD ASPIRANTES
+    ══════════════════════════════════════ -->
+    <div class="page-content" id="page-disponibilidad-aspirantes">
+      <div style="padding:0 28px 48px">
+
+        <!-- Banner -->
+        <div class="da-banner">
+          <div class="da-banner-icon">🧑‍✈️</div>
+          <div>
+            <div class="da-banner-title">Disponibilidad <span>Aspirantes</span></div>
+            <div class="da-banner-sub">Cupos disponibles por ciudad y tipo de vehículo · Actualización manual por coordinadores</div>
+          </div>
+        </div>
+
+        <!-- Mensaje de construcción -->
+        <div class="da-construccion">
+          <div class="da-construccion-icon">🚧</div>
+          <div class="da-construccion-text">
+            <strong>MÓDULO EN CONSTRUCCIÓN</strong>
+            <span>Los datos de disponibilidad serán cargados por el equipo coordinador. Actualmente se muestran valores de ejemplo para validar la estructura.</span>
+          </div>
+          <div class="da-construccion-badge">⏳ EN DESARROLLO</div>
+        </div>
+
+        <!-- Stats rápidos -->
+        <div class="da-stats-row" id="da-stats-row">
+          <div class="da-stat-chip"><span class="da-sc-num" id="da-total-ciudades">0</span><span class="da-sc-lbl">Ciudades</span></div>
+          <div class="da-stat-chip"><span class="da-sc-num" id="da-total-cupos">0</span><span class="da-sc-lbl">Cupos totales</span></div>
+          <div class="da-stat-chip"><span class="da-sc-num" id="da-ciudades-activas">0</span><span class="da-sc-lbl">Con cupos disponibles</span></div>
+        </div>
+
+        <!-- Controles: Buscador + Índice -->
+        <div class="da-controls">
+          <div class="da-search-wrap">
+            <div class="da-search-box">
+              <span class="da-search-ico">🔍</span>
+              <input type="text" id="da-search" class="da-search-inp"
+                placeholder="Buscar ciudad... Ej: Caracas, Maracaibo, Valencia..."
+                oninput="daFilter(this.value)" autocomplete="off">
+              <button id="da-clear-btn" class="da-clear-btn" onclick="daClear()" style="display:none">✕</button>
+            </div>
+          </div>
+          <div class="da-index-box">
+            <div class="da-index-title">📑 Ir a ciudad</div>
+            <div class="da-index-pills" id="da-index-pills"></div>
+          </div>
+        </div>
+
+        <!-- Grid de tarjetas -->
+        <div class="da-grid" id="da-grid"></div>
+
+        <!-- Empty state -->
+        <div class="da-empty" id="da-empty">
+          <div class="da-empty-ico">🔍</div>
+          <div class="da-empty-txt">SIN RESULTADOS</div>
+          <div class="da-empty-sub">No hay ciudades que coincidan con tu búsqueda.</div>
         </div>
 
       </div>
@@ -3362,12 +3840,31 @@ input:checked + .slider:before { transform: translateX(18px); }
 ════════════════════════════════════════ -->
 <script>
 // ═══════════════════════════════════════════
+//  SIDEBAR COLLAPSE
+// ═══════════════════════════════════════════
+function toggleSidebarCollapse() {
+  const sidebar = document.getElementById('sidebar');
+  const main = document.querySelector('.main');
+  const btn = document.getElementById('sidebarCollapseBtn');
+  const isCollapsed = sidebar.classList.toggle('collapsed');
+  main.classList.toggle('sidebar-collapsed', isCollapsed);
+  btn.textContent = isCollapsed ? '▶' : '☰';
+  // Persist
+  try { sessionStorage.setItem('sidebarCollapsed', isCollapsed ? '1' : '0'); } catch(e){}
+}
+
+// ═══════════════════════════════════════════
 //  AUTENTICACIÓN
 // ═══════════════════════════════════════════
-const CREDENCIALES = {
-  remoto: { user: 'Remoto', pass: 'Remoto2026', rol: 'Agente Remoto' },
-  admin:  { user: 'Admin1', pass: '26902673',   rol: 'Administrador' },
-};
+const CREDENCIALES_REMOTO = { user: 'Remoto', pass: 'Remoto2026', rol: 'Agente Remoto' };
+
+const ADMIN_USERS = [
+  { user: 'Lmeneses@ridery.app',  pass: '26902673', rol: 'Administrador' },
+  { user: 'Lugonzales@ridery.app', pass: '21415701', rol: 'Administrador' },
+  { user: 'Mgalindo@ridery.app',   pass: '28055814', rol: 'Administrador' },
+  { user: 'Marioly@ridery.app',    pass: '26214838', rol: 'Administrador' },
+  { user: 'Srahmen@ridery.app',    pass: '29553104', rol: 'Administrador' },
+];
 
 let loginType = 'remoto';
 let currentUser = null;
@@ -3385,47 +3882,99 @@ function switchLoginType(type, btn) {
 function doLogin() {
   const user = document.getElementById('loginUser').value.trim();
   const pass = document.getElementById('loginPass').value.trim();
-  const cred = CREDENCIALES[loginType];
-  if (user === cred.user && pass === cred.pass) {
-    currentUser = user;
-    currentRol = cred.rol;
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('app').classList.add('visible');
-    document.getElementById('sessionUser').textContent = currentUser + ' · ' + currentRol;
-    document.getElementById('home-username').textContent = ', ' + currentUser;
 
-    // Mostrar u ocultar sección Administrative según rol
-    const isAdmin = (loginType === 'admin');
-    const adminSection = document.getElementById('nav-admin-section');
-    if (adminSection) adminSection.style.display = isAdmin ? '' : 'none';
-
-    // Si es admin, desbloquear overlays de módulos administrativos automáticamente
-    if (isAdmin) {
-      document.querySelectorAll('.adm-login-overlay').forEach(function(el) {
-        el.classList.add('hidden');
-      });
+  if (loginType === 'remoto') {
+    if (user === CREDENCIALES_REMOTO.user && pass === CREDENCIALES_REMOTO.pass) {
+      currentUser = user;
+      currentRol = CREDENCIALES_REMOTO.rol;
+      try {
+        sessionStorage.setItem('cx_user', currentUser);
+        sessionStorage.setItem('cx_rol', currentRol);
+        sessionStorage.setItem('cx_loginType', loginType);
+      } catch(e) {}
+      initApp();
+    } else {
+      document.getElementById('loginError').classList.add('show');
+      document.getElementById('loginPass').value = '';
     }
-
-    navigateTo('home', null);
   } else {
-    document.getElementById('loginError').classList.add('show');
-    document.getElementById('loginPass').value = '';
+    // Login admin: buscar entre los usuarios admin
+    const adminMatch = ADMIN_USERS.find(a => a.user === user && a.pass === pass);
+    if (adminMatch) {
+      currentUser = user;
+      currentRol = adminMatch.rol;
+      try {
+        sessionStorage.setItem('cx_user', currentUser);
+        sessionStorage.setItem('cx_rol', currentRol);
+        sessionStorage.setItem('cx_loginType', loginType);
+      } catch(e) {}
+      initApp();
+    } else {
+      document.getElementById('loginError').classList.add('show');
+      document.getElementById('loginPass').value = '';
+    }
   }
+}
+
+function initApp() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('app').classList.add('visible');
+  document.getElementById('sessionUser').textContent = currentUser + ' · ' + currentRol;
+  document.getElementById('home-username').textContent = ', ' + currentUser;
+
+  const isAdmin = (loginType === 'admin');
+  const adminSection = document.getElementById('nav-admin-section');
+  if (adminSection) adminSection.style.display = isAdmin ? '' : 'none';
+
+  if (isAdmin) {
+    document.querySelectorAll('.adm-login-overlay').forEach(function(el) {
+      el.classList.add('hidden');
+    });
+    const exportBtn = document.getElementById('dsp-export-btn');
+    if (exportBtn) exportBtn.style.display = 'flex';
+  }
+
+  // Restaurar sidebar collapse
+  try {
+    if (sessionStorage.getItem('sidebarCollapsed') === '1') {
+      document.getElementById('sidebar').classList.add('collapsed');
+      document.querySelector('.main').classList.add('sidebar-collapsed');
+      const btn = document.getElementById('sidebarCollapseBtn');
+      if (btn) btn.textContent = '▶';
+    }
+  } catch(e) {}
+
+  // Restaurar último módulo o ir a home
+  let lastPage = 'home';
+  try { lastPage = sessionStorage.getItem('cx_lastPage') || 'home'; } catch(e) {}
+  navigateTo(lastPage, null);
 }
 
 function doLogout() {
   currentUser = null; currentRol = null;
+  // Limpiar sesión guardada
+  try {
+    sessionStorage.removeItem('cx_user');
+    sessionStorage.removeItem('cx_rol');
+    sessionStorage.removeItem('cx_loginType');
+    sessionStorage.removeItem('cx_lastPage');
+    sessionStorage.removeItem('sidebarCollapsed');
+  } catch(e) {}
   document.getElementById('app').classList.remove('visible');
   document.getElementById('loginScreen').classList.remove('hidden');
   document.getElementById('loginUser').value = '';
   document.getElementById('loginPass').value = '';
   document.getElementById('loginError').classList.remove('show');
-  // Restaurar overlays administrativos y ocultar sección
   document.querySelectorAll('.adm-login-overlay').forEach(function(el) {
     el.classList.remove('hidden');
   });
   const adminSection = document.getElementById('nav-admin-section');
   if (adminSection) adminSection.style.display = 'none';
+  // Restaurar sidebar
+  document.getElementById('sidebar').classList.remove('collapsed');
+  document.querySelector('.main').classList.remove('sidebar-collapsed');
+  const btn = document.getElementById('sidebarCollapseBtn');
+  if (btn) btn.textContent = '☰';
 }
 
 // ═══════════════════════════════════════════
@@ -3445,6 +3994,7 @@ const PAGES = {
   'ciudades':           'Ciudades',
   'issues':             'Issues · Reporte de Fallas',
   'disponibilidad':     'Disponibilidad Ciudad',
+  'disponibilidad-aspirantes': 'Disponibilidad Aspirantes',
   'material-apoyo':     'Material de Apoyo',
 };
 
@@ -3456,6 +4006,8 @@ function navigateTo(page, el) {
   if (el) el.classList.add('active');
   document.getElementById('topbarTitle').textContent = PAGES[page] || page;
   if (window.innerWidth <= 900) document.getElementById('sidebar').classList.remove('open');
+  // Guardar último módulo
+  try { sessionStorage.setItem('cx_lastPage', page); } catch(e) {}
 }
 
 function toggleNav(id, headerEl) {
@@ -3581,27 +4133,144 @@ function generarSlackPreview() {
   const idUsuario   = document.getElementById('rs-id-usuario').value || '—';
   const idConductor = document.getElementById('rs-id-conductor').value || '—';
   const contexto    = document.getElementById('rs-contexto').value || '—';
+  const agente      = (typeof currentUser !== 'undefined' && currentUser) ? currentUser : 'Admin CX';
+  const fecha       = new Date().toLocaleDateString('es-VE') + ' ' +
+                      new Date().toLocaleTimeString('es-VE', { hour: '2-digit', minute: '2-digit' });
 
   const txt =
-`🚗 *REPORTE RIDERY*
+`🚗 *REPORTE RIDERY — CX*
 ────────────────────────────
 🆔 *ID de Viaje:*      ${idViaje}
 👤 *ID de Usuario:*    ${idUsuario}
 🧑‍✈️ *ID de Conductor:* ${idConductor}
+👨‍💼 *Agente:*          ${agente}
 ────────────────────────────
 📝 *Contexto:*
 ${contexto}
 ────────────────────────────
 📎 Evidencia adjunta al reporte
-📅 Fecha: ${new Date().toLocaleDateString('es-VE')} ${new Date().toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'})}`;
+📅 Fecha: ${fecha}`;
 
   document.getElementById('rs-preview').textContent = txt;
   document.getElementById('rs-preview-block').style.display = 'block';
+
+  // Envío automático a Slack al generar
+  enviarASlack();
 }
 
 function copiarSlack() {
   const txt = document.getElementById('rs-preview').textContent;
   navigator.clipboard.writeText(txt).then(() => alert('✅ Copiado para Slack'));
+}
+
+// ═══════════════════════════════════════════
+//  INTEGRACIÓN SLACK — WEBHOOK
+// ═══════════════════════════════════════════
+const SLACK_WEBHOOK = 'https://hooks.slack.com/triggers/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';
+
+async function enviarASlack() {
+  const idViaje     = document.getElementById('rs-id-viaje').value.trim()     || '—';
+  const idUsuario   = document.getElementById('rs-id-usuario').value.trim()   || '—';
+  const idConductor = document.getElementById('rs-id-conductor').value.trim() || '—';
+  const contexto    = document.getElementById('rs-contexto').value.trim()     || '—';
+  const agente      = (typeof currentUser !== 'undefined' && currentUser) ? currentUser : 'Admin CX';
+  const fecha       = new Date().toLocaleDateString('es-VE') + ' ' +
+                      new Date().toLocaleTimeString('es-VE', { hour: '2-digit', minute: '2-digit' });
+
+  const status = document.getElementById('slack-send-status');
+  const btn    = document.getElementById('btn-send-slack');
+
+  // UI: estado enviando
+  if (status) { status.className = 'slack-send-status'; status.textContent = '⏳ Enviando a Slack...'; status.style.display = 'block'; }
+  if (btn)    { btn.disabled = true; }
+
+  // ── Texto plano (fallback y notificaciones push) ──
+  const textoPlano =
+`🚗 *REPORTE RIDERY — CX*
+────────────────────────────
+🆔 *ID de Viaje:*      ${idViaje}
+👤 *ID de Usuario:*    ${idUsuario}
+🧑‍✈️ *ID de Conductor:* ${idConductor}
+👨‍💼 *Agente:*          ${agente}
+────────────────────────────
+📝 *Contexto:*
+${contexto}
+────────────────────────────
+📎 Evidencia adjunta al reporte
+📅 ${fecha}`;
+
+  // ── Payload: texto + attachment con color ──
+  const payload = {
+    text: textoPlano,
+    attachments: [
+      {
+        color: '#38CEA6',
+        fallback: 'Reporte CX — ID Viaje: ' + idViaje + ' | Agente: ' + agente,
+        blocks: [
+          {
+            type: 'header',
+            text: { type: 'plain_text', text: '🚗 Reporte CX — Ridery', emoji: true }
+          },
+          {
+            type: 'section',
+            fields: [
+              { type: 'mrkdwn', text: '*🆔 ID de Viaje*\n`' + idViaje + '`' },
+              { type: 'mrkdwn', text: '*👤 ID de Usuario*\n`' + idUsuario + '`' }
+            ]
+          },
+          {
+            type: 'section',
+            fields: [
+              { type: 'mrkdwn', text: '*🧑‍✈️ ID de Conductor*\n`' + idConductor + '`' },
+              { type: 'mrkdwn', text: '*👨‍💼 Agente*\n' + agente }
+            ]
+          },
+          { type: 'divider' },
+          {
+            type: 'section',
+            text: { type: 'mrkdwn', text: '*📝 Contexto*\n' + contexto }
+          },
+          {
+            type: 'context',
+            elements: [
+              { type: 'mrkdwn', text: '🕐 *' + fecha + '*  |  📎 Revisar evidencia en el sistema admin' }
+            ]
+          }
+        ]
+      }
+    ]
+  };
+
+  const setOk  = () => {
+    if (status) { status.textContent = '✅ Reporte enviado al canal de Slack.'; status.className = 'slack-send-status ok'; }
+    if (btn)    { btn.disabled = false; }
+  };
+  const setErr = (msg) => {
+    if (status) { status.textContent = '❌ ' + msg + ' — Usa "Copiar" para enviarlo manualmente.'; status.className = 'slack-send-status err'; }
+    if (btn)    { btn.disabled = false; }
+  };
+
+  try {
+    const resp = await fetch(SLACK_WEBHOOK, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (resp.ok) { setOk(); } else { throw new Error('HTTP ' + resp.status); }
+  } catch (err) {
+    // Fallback no-cors (los Incoming Webhooks de Slack lo soportan)
+    try {
+      await fetch(SLACK_WEBHOOK, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      setOk();
+    } catch(e2) {
+      setErr(e2.message);
+    }
+  }
 }
 
 function limpiarReporte(prefix) {
@@ -4125,6 +4794,21 @@ window.onload = function() {
   catInit();
   ciInit();
   dspInit();
+  daInit();
+
+  // Restaurar sesión si existe
+  try {
+    const savedUser = sessionStorage.getItem('cx_user');
+    const savedRol  = sessionStorage.getItem('cx_rol');
+    const savedType = sessionStorage.getItem('cx_loginType');
+    if (savedUser && savedRol && savedType) {
+      currentUser = savedUser;
+      currentRol  = savedRol;
+      loginType   = savedType;
+      initApp();
+      return;
+    }
+  } catch(e) {}
 };
 
 // ═══════════════════════════════════════════
@@ -4641,7 +5325,6 @@ function gvExportarPDF() {
 
 // ═══════════════════════════════════════════
 //  LOGIN COMPARTIDO — Módulos Administrative
-//  Credenciales: Admin1 / 26902673
 // ═══════════════════════════════════════════
 function admLogin(module) {
   const userEl  = document.getElementById(module + '-adm-user');
@@ -4652,7 +5335,9 @@ function admLogin(module) {
   const u = userEl.value.trim();
   const p = passEl.value.trim();
 
-  if (u === 'Admin1' && p === '26902673') {
+  const valid = ADMIN_USERS.some(a => a.user === u && a.pass === p);
+
+  if (valid) {
     overlay.classList.add('hidden');
     errEl.classList.remove('show');
   } else {
@@ -7005,6 +7690,26 @@ function dspRender(query) {
 
 function dspInit() {
   dspRender('');
+  // Mostrar botón exportar solo si es admin
+  const exportBtn = document.getElementById('dsp-export-btn');
+  if (exportBtn && loginType === 'admin') {
+    exportBtn.style.display = 'flex';
+  }
+}
+
+function dspExportarExcel() {
+  var filas = [];
+  Object.keys(DSP_DATA).sort().forEach(function(city) {
+    DSP_DATA[city].forEach(function(f) {
+      filas.push({ 'Ciudad': city, 'Flota': f.name, 'Estado': f.status });
+    });
+  });
+  var ws = XLSX.utils.json_to_sheet(filas);
+  ws['!cols'] = [{wch:20},{wch:28},{wch:8}];
+  var wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Disponibilidad Flotas');
+  var fecha = new Date().toLocaleDateString('es-VE').replace(/\//g,'-');
+  XLSX.writeFile(wb, 'disponibilidad_flotas_' + fecha + '.xlsx');
 }
 
 
@@ -7372,33 +8077,646 @@ var MA_GUIAS = {
         '<div class="ma-tip">📌 <strong>Regla general ECR:</strong> Ante cualquier situación que involucre el estado físico o contractual del vehículo, <strong>siempre escalar al equipo ECR</strong>. CX solo gestiona lo operativo (viajes, wallet, app).</div>'
       },
     ]
+  },
+
+  zendesk: {
+    titulo: 'ZENDESK — PLATAFORMA DE GESTIÓN DE TICKETS',
+    secciones: [
+      {
+        ico: '🎫', titulo: '¿QUÉ ES ZENDESK?',
+        sub: 'Plataforma integral de gestión de relaciones con clientes.',
+        html: '<p style="font-family:var(--font-secondary);font-size:.86rem;line-height:1.7;color:var(--negro);font-weight:600">Zendesk es nuestra plataforma integral de gestión de relaciones con clientes que unifica todas las comunicaciones, permitiendo la centralización de interacciones a través de diversos canales como correo electrónico, chat en tiempo real, redes sociales y comunicación telefónica.</p>'
+      },
+      {
+        ico: '🔄', titulo: 'TRANSFERENCIAS',
+        sub: 'Cuándo y cómo transferir un ticket a otro equipo.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">✅</div><div><div class="ma-incident-name">¿Cuándo transferir?</div><div class="ma-incident-desc">Cuando no tenemos todas las herramientas para resolver la consulta del cliente y es necesario involucrar a un equipo especializado con el conocimiento y acceso adecuado.</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">📋</div><div><div class="ma-incident-name">Antes de transferir — ¿Qué debes validar?</div><div class="ma-incident-desc">1. Identificar el área correcta a la que pertenece el caso. 2. Dejar un mensaje de espera al cliente. 3. Agregar una nota interna con el contexto del caso para el equipo receptor. Puedes usar el comando /transferencia en Zendesk.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">💬</div><div><div class="ma-incident-name">Mensaje de transferencia</div><div class="ma-incident-desc">"Para poder resolver tu consulta de la manera más eficiente, necesito transferirte al área de [nombre del área]. Ellos cuentan con las herramientas y el conocimiento especializado para atender tu caso. Te transfiero en este momento, y te agradezco tu paciencia."</div></div></div>' +
+        '</div>'
+      },
+      {
+        ico: '📋', titulo: 'GESTIÓN DE TICKETS',
+        sub: 'Buenas prácticas para manejar la bandeja de tickets.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">⏰</div><div><div class="ma-incident-name">Prioridad por antigüedad</div><div class="ma-incident-desc">Siempre dar prioridad a los tickets que llevan más tiempo esperando respuesta. Es importante cambiar el estatus de "abierto" una vez que el ticket esté gestionado para no afectar los tiempos de resolución del grupo.</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">🔄</div><div><div class="ma-incident-name">Cambio de estatus</div><div class="ma-incident-desc">Cambia el estatus inmediatamente después de gestionar el ticket. No dejes tickets en estatus "abierto" cuando ya han sido atendidos, ya que esto afecta las métricas del equipo.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">🚫</div><div><div class="ma-incident-name">Frases que debes evitar</div><div class="ma-incident-desc">Evita frases como "¿sigues en línea?". Utiliza alternativas que demuestren compromiso genuino en ayudar al cliente y que lo hagan sentir que su solicitud está siendo atendida.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">📞</div><div><div class="ma-incident-name">Contacto por WhatsApp</div><div class="ma-incident-desc">Cuando envíes un WhatsApp, siempre deja en el grupo de entre-equipos el motivo por el cual contactaste al usuario/rider para que los demás compañeros estén al tanto.</div></div></div>' +
+        '</div>'
+      },
+    ]
+  },
+
+  recalculos: {
+    titulo: 'RECÁLCULOS — GUÍA PASO A PASO',
+    secciones: [
+      {
+        ico: '🔄', titulo: '¿QUÉ ES UN RECÁLCULO?',
+        sub: 'By Miguel Corena — Agente de Incidencias de Pagos.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">📌</div><div><div class="ma-incident-name">Definición</div><div class="ma-incident-desc">Es una incidencia que se realiza cuando hay algún tipo de confusión con la dirección del viaje. Puede ser que el cliente se haya equivocado y colocó mal la dirección y el conductor llegó al punto incorrecto. Contempla dos posibilidades: 1) El conductor recorrió más. 2) El conductor recorrió menos.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">⚠️</div><div><div class="ma-incident-name">Dos reglas importantes</div><div class="ma-incident-desc">1. Si es por dirección errónea y el cliente debe pagar más, ANTES de realizar la incidencia el cliente debe aprobar ese pago extra y pagarlo. 2. Si el conductor se quedó accidentado y tiene menos del 50% del recorrido, el viaje se cancela.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">🛠️</div><div><div class="ma-incident-name">Herramientas necesarias</div><div class="ma-incident-desc">Debes tener a mano dos herramientas: DISPATCHER (para validar las direcciones del trip completed y el monto estimado) y CALCULADORA (buscar el apartado de "Recálculos").</div></div></div>' +
+        '</div>'
+      },
+      {
+        ico: '🗺️', titulo: 'PASO 1 Y 2 — DISPATCHER',
+        sub: 'Cómo identificar el recorrido y validar las direcciones.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">1️⃣</div><div><div class="ma-incident-name">Paso 1 — Copiar direcciones de Trip Completed</div><div class="ma-incident-desc">En el viaje, ir a la sección de Trip Completed y copiar el Pickup Address y el Destination Address. IMPORTANTE: Trip Requested = dirección puesta por el usuario. Trip Completed = recorrido real del conductor en el GPS.</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">2️⃣</div><div><div class="ma-incident-name">Paso 2 — Pegar en Dispatcher</div><div class="ma-incident-desc">Copiar y pegar las direcciones en Dispatcher. DATO: Siempre valida la flota correcta (no importa el método de pago). TIP: Haz ZOOM en las direcciones y mueve el muñequito verde (cliente) y la bandera roja (destino) al lugar preciso. Si Dispatcher no lee bien las direcciones, hazlo manualmente.</div></div></div>' +
+        '</div>' +
+        '<div class="ma-tip">💡 Si el viaje fue completado en el origen → entra en revisión PUR. El conductor no marcó el recorrido correctamente.</div>'
+      },
+      {
+        ico: '🧮', titulo: 'PASO 3 — CALCULADORA Y SURGE',
+        sub: 'Cómo calcular el monto correcto considerando el surge.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">⚡</div><div><div class="ma-incident-name">Sin Surge</div><div class="ma-incident-desc">En Amount Admin colocar el costo del viaje que dio ADMIN. En Amount Real colocar el monto de Dispatcher (FARE). La calculadora hace el resto. El resultado del CÁLCULO debe ser ≥ $1 para que aplique.</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">📈</div><div><div class="ma-incident-name">Solo Surge en Dispatcher</div><div class="ma-incident-desc">Divide el FARE de Dispatcher por el surge de Dispatcher. Ejemplo: 8.45 / 1.90 = 4.47$. Siempre coloca dos decimales. Este resultado es el Amount Real que vas a la calculadora.</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">📊</div><div><div class="ma-incident-name">Solo Surge en Admin</div><div class="ma-incident-desc">Multiplica el FARE por el surge de ADMIN. El surge de ADMIN debe ser mayor a $1 (si es 1.05 en adelante, multiplicas).</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">🔢</div><div><div class="ma-incident-name">Ambos tienen Surge</div><div class="ma-incident-desc">Divide el FARE por el surge de Dispatcher y luego multiplica por el surge de ADMIN. El resultado va a la calculadora como Amount Real.</div></div></div>' +
+        '</div>' +
+        '<div class="ma-tip">⚠️ El recálculo SIEMPRE debe ser MAYOR O IGUAL A $1 para ser aplicable. Si el cliente se niega a pagar o nunca paga la diferencia, no será aplicable para el conductor.</div>'
+      },
+      {
+        ico: '🚀', titulo: 'PASO 4 — ENVIAR A INCIDENCIAS',
+        sub: 'Qué hacer una vez validado el recálculo.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">✅</div><div><div class="ma-incident-name">Recálculo a favor del conductor</div><div class="ma-incident-desc">El cliente debe aprobar y pagar la diferencia ANTES de procesar la incidencia. Si el cliente se niega → no aplica. Una vez confirmado el pago, enviar a Incidencias de Pagos.</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">💰</div><div><div class="ma-incident-name">Recálculo a favor del cliente</div><div class="ma-incident-desc">Es el más común. El rider finalizó el viaje como completado pero no hizo todo el recorrido solicitado. Al ojo puedes ver que no lo hizo en su totalidad. Mismo proceso: Dispatcher + Calculadora. Si el monto ≥ $1 → enviar a Incidencias de Pagos.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">🛤️</div><div><div class="ma-incident-name">Multiparada</div><div class="ma-incident-desc">Es igual. Si no se hizo una parada, valida la dirección con la que sí se hizo. Si se hicieron ambas, en Dispatcher está la opción de multiparada: solo copiar y pegar las direcciones.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">🔧</div><div><div class="ma-incident-name">Cambio de dirección</div><div class="ma-incident-desc">Para ATConductores: si el rider dice "el cliente cambió la dirección" tienes dos opciones: 1) Terminar el viaje y hacer un recálculo, o 2) Si aún no inició el viaje, cancelar y crear otro desde la app del cliente (ahorra todo el proceso manual).</div></div></div>' +
+        '</div>'
+      },
+    ]
+  },
+
+  pur: {
+    titulo: 'VIAJES PAYMENT UNDER REVIEW (PUR)',
+    secciones: [
+      {
+        ico: '🔍', titulo: '¿QUÉ SON LOS VIAJES PUR?',
+        sub: 'Viajes bajo revisión por patrones detectados por el sistema.',
+        html: '<p style="font-family:var(--font-secondary);font-size:.86rem;line-height:1.7;color:var(--negro);font-weight:600;margin-bottom:14px">El módulo de Payment Under Review ("Pago bajo revisión") enlista todos los viajes completados por conductores que cumplen criterios específicos que podrían indicar un patrón de fraude. Deben ser auditados por el equipo de Plataforma y Fraude.</p>' +
+        '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">⚠️</div><div><div class="ma-incident-name">OJO: NO necesariamente son fraude</div><div class="ma-incident-desc">La causa más frecuente es que el recorrido no fue marcado correctamente, o el conductor finalizó el viaje mucho antes del destino real. REAL KM = el recorrido que debió marcar en la app. KM TRAVELED = el recorrido que marcó el conductor.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">📍</div><div><div class="ma-incident-name">Dónde encontrar el módulo</div><div class="ma-incident-desc">En Admin → Fraud → Payments under review. Todos los agentes remotos tienen este permiso habilitado. Si no lo tienes, comunícalo para que te lo asignen.</div></div></div>' +
+        '</div>'
+      },
+      {
+        ico: '🚗', titulo: 'GESTIÓN DEL CASO',
+        sub: 'Qué hacer cuando recibes un caso PUR.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">1️⃣</div><div><div class="ma-incident-name">Entender por qué está en el módulo</div><div class="ma-incident-desc">Primero revisar el View Map del viaje para entender dónde finalizó realmente. Si el viaje fue completado en el origen, el conductor no marcó el recorrido. Si finalizó en un punto lejano al destino, tampoco marcó correctamente.</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">2️⃣</div><div><div class="ma-incident-name">Preguntar al conductor</div><div class="ma-incident-desc">Plantilla (sin recorrido): "Estimado, estoy revisando en sistema y detecto que el viaje no tiene el recorrido marcado. ¿Sucedió algo ese día que gestionó el viaje, que haya impedido que marque el recorrido en su app?" — Plantilla (finalizado lejos del destino): "Estimado, estoy revisando en sistema y detecto que el viaje no fue completado en el punto marcado por el cliente, fue completado en un punto lejano antes de llegar al destino. ¿Sucedió algo ese día?"</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">3️⃣</div><div><div class="ma-incident-name">Reportar el caso</div><div class="ma-incident-desc">Con el contexto recopilado, realizar el reporte en el formulario correspondiente o adjuntarlo en una nota interna para enviarlo a la cola de Plataforma.</div></div></div>' +
+        '</div>'
+      },
+      {
+        ico: '📝', titulo: 'PLANTILLAS Y ORIENTACIÓN AL CONDUCTOR',
+        sub: 'Mensajes para educar al conductor y gestionar con el usuario.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">📋</div><div><div class="ma-incident-name">Plantilla para educar al conductor</div><div class="ma-incident-desc">"Estimado, le explico lo que sucede. Cuando el sistema detecta que el viaje no tiene el recorrido marcado correctamente, el mismo entra en un proceso de revisión. Lo cual genera que no se visualice el viaje en su módulo de ganancias. Le recomendamos siempre realizar el marcaje correcto del recorrido del viaje en su app para que esta situación no vuelva a ocurrir. ✅"</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">👤</div><div><div class="ma-incident-name">Si el usuario reclama</div><div class="ma-incident-desc">Si el viaje entra en revisión, el vuelto no se puede abonar automáticamente hasta que sea auditado y liberado. Indagar con el usuario si el viaje fue realizado correctamente y si hubo alguna novedad. El principal criterio que activa el PUR es el KM0.</div></div></div>' +
+        '</div>'
+      },
+    ]
+  },
+
+  fraude: {
+    titulo: 'REPORTE DE CASOS DE POSIBLE FRAUDE',
+    secciones: [
+      {
+        ico: '🚨', titulo: '¿QUÉ SE REPORTA EN ESTE FLUJO?',
+        sub: 'Canal de reporte para casos sospechosos y viajes PUR liberados no realizados.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">🔴</div><div><div class="ma-incident-name">Casos de posible fraude</div><div class="ma-incident-desc">Todo lo que consideres que pueda ser un fraude por parte de un conductor o usuario, junto con toda la evidencia disponible, debe ser reportado en el flujo de trabajo "Posible fraude" en Slack.</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">🔓</div><div><div class="ma-incident-name">Viajes PUR liberados que el conductor indica NO haber realizado</div><div class="ma-incident-desc">IMPORTANTE: Los viajes PUR liberados NO pueden ser cancelados. Si un conductor nos contacta porque se le liberó un viaje PUR y dice no haberlo realizado, se debe seguir el siguiente protocolo.</div></div></div>' +
+        '</div>'
+      },
+      {
+        ico: '📋', titulo: 'PROTOCOLO — VIAJE PUR LIBERADO NO REALIZADO',
+        sub: 'Pasos antes de reportar en el flujo de trabajo.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">1️⃣</div><div><div class="ma-incident-name">Recopilar evidencia</div><div class="ma-incident-desc">Recopilar toda la evidencia del caso y la razón que da el conductor indicando por qué el viaje liberado NO fue realizado.</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">2️⃣</div><div><div class="ma-incident-name">Verificar si es viaje con efectivo</div><div class="ma-incident-desc">Si es un viaje con efectivo y generó vuelto al cliente: inmediatamente deben descontárselo si este no lo ha usado. Si ya lo usó, debe informarse en el reporte.</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">3️⃣</div><div><div class="ma-incident-name">Reportar en el flujo de trabajo</div><div class="ma-incident-desc">Después de recopilar toda la información, realizar el reporte en el flujo de trabajo (Slack) y esperar que el equipo de Plataforma y Fraude realice su auditoría. La revisión puede tardar entre 24 a 48 horas dependiendo del caso. Los comentarios se irán dejando en el hilo del reporte.</div></div></div>' +
+        '</div>'
+      },
+    ]
+  },
+
+  faq: {
+    titulo: 'PREGUNTAS FRECUENTES — CANAL ENTRE EQUIPOS',
+    secciones: [
+      {
+        ico: '📋', titulo: 'GESTIÓN DE TICKETS',
+        sub: 'Cómo manejar la bandeja y los tiempos de resolución.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">⏰</div><div><div class="ma-incident-name">¿Cómo gestionar tickets con más tiempo?</div><div class="ma-incident-desc">Siempre dar prioridad a los tickets que llevan más tiempo esperando respuesta. Es importante cambiar el estatus de "abierto" una vez que el ticket esté gestionado para no afectar los tiempos de resolución del grupo.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">🔄</div><div><div class="ma-incident-name">¿Cuándo cambiar el estatus?</div><div class="ma-incident-desc">Inmediatamente después de gestionar el ticket. No dejes tickets en "abierto" cuando ya fueron atendidos. Afecta las métricas del equipo.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">📊</div><div><div class="ma-incident-name">¿Cómo reportar casos especiales o dudas?</div><div class="ma-incident-desc">Cualquier duda o gestión pertinente debe colocarse en el canal entre-equipos para que el equipo pueda ayudar. Permite que todos conozcan la gestión y puedan ofrecer mejoras constructivas.</div></div></div>' +
+        '</div>'
+      },
+      {
+        ico: '🔄', titulo: 'TRANSFERENCIAS Y COMUNICACIÓN',
+        sub: 'Cómo transferir tickets y comunicarse con otros equipos.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">📤</div><div><div class="ma-incident-name">¿Qué hacer al transferir un ticket?</div><div class="ma-incident-desc">1) Dejar un mensaje de espera para que el cliente sepa que será transferido. 2) Colocar una nota interna con contexto del caso. Puedes usar el comando /transferencia en Zendesk.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">💬</div><div><div class="ma-incident-name">¿Cuándo contactar por WhatsApp?</div><div class="ma-incident-desc">Cuando envíes un WhatsApp, siempre deja en el grupo de entre-equipos el motivo por el cual contactaste al usuario/rider para que los demás compañeros estén al tanto.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">🎯</div><div><div class="ma-incident-name">¿Cómo manejar disputas de viajes?</div><div class="ma-incident-desc">Las disputas las maneja el equipo de Incidencias. Si encuentras un viaje en disputa, redirigir el ticket al equipo de incidencias de pagos para que validen la disputa.</div></div></div>' +
+        '</div>'
+      },
+      {
+        ico: '🔧', titulo: 'CASOS ESPECIALES',
+        sub: 'Situaciones frecuentes y cómo manejarlas.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">🔍</div><div><div class="ma-incident-name">¿Qué hacer si el cliente reporta problemas con la app?</div><div class="ma-incident-desc">Si el cliente adjunta una captura con un ID de viaje, úsalo para localizar el viaje en admin y verificar su estatus. No solicites datos que ya tienes en la imagen proporcionada.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">🆔</div><div><div class="ma-incident-name">¿Cómo verifico si un viaje fue realmente realizado?</div><div class="ma-incident-desc">Antes de procesar reportes, siempre confirma con el usuario si el viaje fue efectivamente realizado o si solo tuvo dificultades para solicitar el servicio. Muchas veces el cliente no ha intentado pedir el viaje.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">🏢</div><div><div class="ma-incident-name">¿Qué hacer si un rider deja objetos olvidados?</div><div class="ma-incident-desc">Indicar al rider que lleve los objetos a la oficina. El rider puede coordinar la entrega directa con el usuario si ambos están de acuerdo.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">🔐</div><div><div class="ma-incident-name">¿Cómo procedo con casos de autenticación?</div><div class="ma-incident-desc">Todos los agentes deben estar pendientes de las autenticaciones según el horario asignado. Pueden validar su turno en el archivo de Horarios ATI o hacer seguimiento cuando se les hace la etiqueta.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">💰</div><div><div class="ma-incident-name">¿Qué hacer con casos de Yuno liberados por tecnología?</div><div class="ma-incident-desc">Cuando tecnología libere un conductor de Yuno, se debe crear una incidencia para abonar la ganancia al conductor. El reporte se transferirá al canal correspondiente para que el equipo de turno proceda.</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">🚗</div><div><div class="ma-incident-name">¿Cómo manejo solicitudes de cambio de flota?</div><div class="ma-incident-desc">Para cambios de flota (ej. de estándar a económico), reportar en el canal de la ciudad correspondiente explicando el motivo. Hay que esperar aprobación del equipo para proceder con la recertificación.</div></div></div>' +
+        '</div>'
+      },
+    ]
+  },
+
+  arc: {
+    titulo: 'ARC CITY — DIRECTORIO DE EMERGENCIAS POR ESTADO',
+    secciones: [
+      {
+        ico: '⛑️', titulo: '¿QUÉ ES ARC CITY?',
+        sub: 'Central de Respuesta Rápida para conductores en la vía.',
+        html: '<p style="font-family:var(--font-secondary);font-size:.86rem;line-height:1.7;color:var(--negro);font-weight:600;margin-bottom:14px">ARC (Accident Resolution Center) City es tu Central de Respuesta Rápida. Aquí encontrarás el directorio estratégico de números de emergencia organizado por estado, diseñado para respaldar a nuestros conductores ante cualquier imprevisto en la vía. Recuerda: en nuestro mundo, cada segundo cuenta y una llamada a tiempo transforma realidades.</p>' +
+        '<div class="ma-tip">⚠️ Para declarar un siniestro ante Seguros Venezuela, el conductor debe hacerlo en un plazo NO mayor a 5 días hábiles.</div>'
+      },
+      {
+        ico: '📄', titulo: 'DOCUMENTACIÓN PARA DECLARAR SINIESTRO',
+        sub: 'Qué debe enviar el conductor a siniestrosautomovil@segurosvenezuela.com',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">📋</div><div><div class="ma-incident-name">Documentos requeridos</div><div class="ma-incident-desc">• Llenar y firmar planilla de declaración de siniestros (adjuntar al correo siniestrosautomovil@segurosvenezuela.com) • Carta explicativa detallada de la ocurrencia del hecho • Actuaciones de tránsito en caso de existir (explicar por qué en caso de no existir) • Copia del documento de propiedad del vehículo (si es 0km: factura y certificado de origen) • Copia de la cédula de identidad del conductor • Copia de la licencia del conductor • Copia del certificado médico del conductor • Copia del RIF • Coordinar con el área el ajuste de daños (Peritaje)</div></div></div>' +
+        '</div>'
+      },
+      {
+        ico: '🏙️', titulo: 'CARACAS',
+        sub: 'Números de emergencia para el área metropolitana.',
+        html: '<div style="overflow-x:auto"><table class="ma-cortes-table"><thead><tr><th>Organismo</th><th>Número</th><th>Cuándo llamar</th></tr></thead><tbody>' +
+          '<tr><td><b>Ángeles de la Autopista</b></td><td>0800-6888425</td><td>Prioridad #1 en autopistas. Más rápidos en accidentes de tránsito.</td></tr>' +
+          '<tr><td><b>Centro de Ambulancias CIACA</b></td><td>0800-2422201</td><td>Servicio gratuito de la Alcaldía para todo el municipio Libertador.</td></tr>' +
+          '<tr><td><b>Protección Civil Nacional</b></td><td>0800-7248451</td><td>Accidentes de magnitud o apoyo en zonas urbanas.</td></tr>' +
+          '<tr><td><b>Bomberos de Caracas</b></td><td>(0212) 545-4545</td><td>Personas atrapadas, derrame de combustible o riesgo de incendio.</td></tr>' +
+          '<tr><td><b>Emergencias Miranda</b></td><td>0800-6472632</td><td>Accidentes en Baruta, Chacao, El Hatillo o Sucre (Eje metropolitano).</td></tr>' +
+        '</tbody></table></div>'
+      },
+      {
+        ico: '🏙️', titulo: 'MARACAY',
+        sub: 'Números de emergencia para Aragua.',
+        html: '<div style="overflow-x:auto"><table class="ma-cortes-table"><thead><tr><th>Organismo</th><th>Número</th><th>Observaciones</th></tr></thead><tbody>' +
+          '<tr><td><b>VEN 911 Aragua</b></td><td>911</td><td>Central principal. Coordina policía y ambulancias.</td></tr>' +
+          '<tr><td><b>Bomberos de Aragua</b></td><td>(0243) 235-1346 / 235-2448</td><td>Sede central en Maracay. Atienden rescates.</td></tr>' +
+          '<tr><td><b>Protección Civil Aragua</b></td><td>(0243) 247-1778 / 246-7204</td><td>Av. Mariño sur. Expertos en atención prehospitalaria.</td></tr>' +
+          '<tr><td><b>Cruz Roja Maracay</b></td><td>(0243) 553-2629</td><td>Cerca del peaje de Tapa Tapa. Traslados y apoyo médico.</td></tr>' +
+        '</tbody></table></div>'
+      },
+      {
+        ico: '🏙️', titulo: 'VALENCIA / PTO. CABELLO',
+        sub: 'Números de emergencia para Carabobo.',
+        html: '<div style="overflow-x:auto"><table class="ma-cortes-table"><thead><tr><th>Organismo</th><th>Número</th><th>Notas</th></tr></thead><tbody>' +
+          '<tr><td><b>0800-BIGOTE</b></td><td>0800-244683</td><td>Servicio estrella en Carabobo. Ambulancias modernas y activas.</td></tr>' +
+          '<tr><td><b>Bomberos de Valencia</b></td><td>(0241) 832-0980</td><td>Zona Industrial. Heridos atrapados.</td></tr>' +
+          '<tr><td><b>Protección Civil Carabobo</b></td><td>(0241) 859-3969</td><td>Coordinación estatal de emergencias y rescate vial.</td></tr>' +
+          '<tr><td><b>Invialca (Auxilio Vial)</b></td><td>0412-2768592</td><td>Autopista del Este y tramos de peajes.</td></tr>' +
+        '</tbody></table></div>'
+      },
+      {
+        ico: '🏙️', titulo: 'BARQUISIMETO',
+        sub: 'Números de emergencia para Lara.',
+        html: '<div style="overflow-x:auto"><table class="ma-cortes-table"><thead><tr><th>Organismo</th><th>Número</th><th>Observaciones</th></tr></thead><tbody>' +
+          '<tr><td><b>Protección Civil Lara</b></td><td>(0251) 254-4889 / 254-3965</td><td>Principal respuesta. Mando de atención prehospitalaria.</td></tr>' +
+          '<tr><td><b>Bomberos de Iribarren</b></td><td>(0251) 231-7475 / 231-4475</td><td>Av. Carabobo. Incendios y rescates viales.</td></tr>' +
+          '<tr><td><b>VEN 911 Lara</b></td><td>911</td><td>Despacha patrullas y ambulancias en toda la ciudad.</td></tr>' +
+          '<tr><td><b>Cruz Roja Barquisimeto</b></td><td>(0251) 808-9694</td><td>Urb. Patarata. Emergencias médicas.</td></tr>' +
+          '<tr><td><b>Ambulancias Iribarren</b></td><td>0800-2668446</td><td>Emergencias y traslados municipales.</td></tr>' +
+        '</tbody></table></div>'
+      },
+      {
+        ico: '🏙️', titulo: 'MARACAIBO / CABIMAS',
+        sub: 'Números de emergencia para Zulia.',
+        html: '<div style="overflow-x:auto"><table class="ma-cortes-table"><thead><tr><th>Organismo</th><th>Número</th><th>Observaciones</th></tr></thead><tbody>' +
+          '<tr><td><b>VEN 911 Zulia</b></td><td>911</td><td>Central principal. Despacha todos los organismos.</td></tr>' +
+          '<tr><td><b>Bomberos de Maracaibo</b></td><td>0414-9635992</td><td>Ambulancias activas. Número celular directo.</td></tr>' +
+          '<tr><td><b>Protección Civil Zulia</b></td><td>(0261) 757-6761</td><td>Zona de El Milagro.</td></tr>' +
+        '</tbody></table></div>'
+      },
+      {
+        ico: '🏙️', titulo: 'MARGARITA / PAMPATAR',
+        sub: 'Números de emergencia para Nueva Esparta.',
+        html: '<div style="overflow-x:auto"><table class="ma-cortes-table"><thead><tr><th>Organismo</th><th>Número</th><th>Observaciones</th></tr></thead><tbody>' +
+          '<tr><td><b>VEN 911 N. Esparta</b></td><td>911</td><td>Central principal. Monitoreo por cámaras en Porlamar y Pampatar.</td></tr>' +
+          '<tr><td><b>Protección Civil Maneiro</b></td><td>0424-814-2396</td><td>Específico para Pampatar.</td></tr>' +
+          '<tr><td><b>Bomberos N.E.</b></td><td>(0295) 264-1645</td><td>Sede principal en Porlamar.</td></tr>' +
+          '<tr><td><b>Protección Civil Estatal</b></td><td>(0295) 263-5961</td><td>Avenidas Juan Bautista Arismendi o Fucho Tovar.</td></tr>' +
+          '<tr><td><b>PoliManeiro</b></td><td>0412-358-7108</td><td>Presencia policial inmediata en Pampatar y Playa El Ángel.</td></tr>' +
+        '</tbody></table></div>'
+      },
+      {
+        ico: '🏙️', titulo: 'PUERTO LA CRUZ / LECHERÍA / EL TIGRE',
+        sub: 'Números de emergencia para Anzoátegui.',
+        html: '<div style="overflow-x:auto"><table class="ma-cortes-table"><thead><tr><th>Organismo</th><th>Número</th><th>Observaciones</th></tr></thead><tbody>' +
+          '<tr><td><b>Protección Civil Anzoátegui</b></td><td>(0281) 275-1992</td><td>Sede principal. Av. Intercomunal y Alterna.</td></tr>' +
+          '<tr><td><b>Bomberos de Anzoátegui</b></td><td>(0281) 274-0612</td><td>Incendios y rescates viales en todo el eje.</td></tr>' +
+          '<tr><td><b>Protección Civil Urbaneja</b></td><td>(0281) 281-0851</td><td>Exclusivo para Lechería.</td></tr>' +
+          '<tr><td><b>VEN 911 Anzoátegui</b></td><td>911</td><td>Ambulancias y patrullas en la zona norte.</td></tr>' +
+          '<tr><td><b>Bomberos El Tigre</b></td><td>(0283) 235-0811</td><td>Av. Winston Churchill. Primera respuesta local.</td></tr>' +
+          '<tr><td><b>Cruz Roja El Tigre</b></td><td>(0283) 235-3037</td><td>Traslados y emergencias médicas.</td></tr>' +
+        '</tbody></table></div>'
+      },
+      {
+        ico: '🏙️', titulo: 'PUERTO ORDAZ / CIUDAD GUAYANA / CIUDAD BOLÍVAR',
+        sub: 'Números de emergencia para Bolívar.',
+        html: '<div style="overflow-x:auto"><table class="ma-cortes-table"><thead><tr><th>Organismo</th><th>Número</th><th>Observaciones</th></tr></thead><tbody>' +
+          '<tr><td><b>Bomberos de Ciudad Bolívar</b></td><td>(0285) 632-1111</td><td>Sede principal. Casco histórico y avenidas.</td></tr>' +
+          '<tr><td><b>Protección Civil Bolívar</b></td><td>(0285) 632-3414</td><td>Troncales y Puente Angostura.</td></tr>' +
+          '<tr><td><b>VEN 911 Ciudad Bolívar</b></td><td>911</td><td>Despacho de emergencias médicas del municipio.</td></tr>' +
+        '</tbody></table></div>'
+      },
+      {
+        ico: '🏙️', titulo: 'MATURÍN / MÉRIDA / BARINAS / SAN CRISTÓBAL',
+        sub: 'Números de emergencia para Monagas, Mérida, Barinas y Táchira.',
+        html: '<div style="overflow-x:auto"><table class="ma-cortes-table"><thead><tr><th>Ciudad</th><th>Organismo</th><th>Número</th></tr></thead><tbody>' +
+          '<tr><td rowspan="3"><b>Maturín</b></td><td>VEN 911 Monagas</td><td>911</td></tr>' +
+          '<tr><td>Bomberos de Monagas</td><td>(0291) 642-7351</td></tr>' +
+          '<tr><td>Protección Civil Monagas</td><td>(0291) 642-1250</td></tr>' +
+          '<tr><td rowspan="3"><b>Mérida</b></td><td>Bomberos de Mérida</td><td>(0274) 266-0244</td></tr>' +
+          '<tr><td>Protección Civil Mérida</td><td>0800-7263743</td></tr>' +
+          '<tr><td>VEN 911 Mérida</td><td>911</td></tr>' +
+          '<tr><td rowspan="3"><b>Barinas</b></td><td>VEN 911 Barinas</td><td>911</td></tr>' +
+          '<tr><td>Bomberos de Barinas</td><td>(0273) 552-1209</td></tr>' +
+          '<tr><td>Protección Civil Barinas</td><td>(0273) 546-3475</td></tr>' +
+          '<tr><td rowspan="3"><b>San Cristóbal</b></td><td>Protección Civil Táchira</td><td>(0276) 347-1919</td></tr>' +
+          '<tr><td>Bomberos San Cristóbal</td><td>(0276) 341-3555</td></tr>' +
+          '<tr><td>VEN 911 Táchira</td><td>911</td></tr>' +
+        '</tbody></table></div>'
+      },
+      {
+        ico: '🏙️', titulo: 'ACARIGUA / CORO / CUMANÁ',
+        sub: 'Números de emergencia para Portuguesa, Falcón y Sucre.',
+        html: '<div style="overflow-x:auto"><table class="ma-cortes-table"><thead><tr><th>Ciudad</th><th>Organismo</th><th>Número</th></tr></thead><tbody>' +
+          '<tr><td rowspan="3"><b>Acarigua - Araure</b></td><td>Bomberos de Portuguesa</td><td>(0255) 621-3831</td></tr>' +
+          '<tr><td>Protección Civil Portuguesa</td><td>(0255) 621-0306</td></tr>' +
+          '<tr><td>VEN 911 Portuguesa</td><td>911</td></tr>' +
+          '<tr><td rowspan="3"><b>Coro</b></td><td>Protección Civil Falcón</td><td>(0268) 252-4153</td></tr>' +
+          '<tr><td>Bomberos de Coro</td><td>(0268) 253-9923</td></tr>' +
+          '<tr><td>VEN 911 / 171 Falcón</td><td>911 / 171</td></tr>' +
+          '<tr><td rowspan="4"><b>Cumaná</b></td><td>VEN 911 Sucre</td><td>911</td></tr>' +
+          '<tr><td>Protección Civil Sucre</td><td>(0293) 451-6262</td></tr>' +
+          '<tr><td>Bomberos de Cumaná</td><td>(0293) 432-1111</td></tr>' +
+          '<tr><td>Cruz Roja Cumaná</td><td>(0293) 441-0464</td></tr>' +
+        '</tbody></table></div>'
+      },
+    ]
+  },
+
+  plantillas_arc: {
+    titulo: 'PLANTILLAS ARC — CASOS SOS Y EMERGENCIAS',
+    secciones: [
+      {
+        ico: '🛡️', titulo: 'SALUDO DE ORO — PRIMER CONTACTO',
+        sub: 'Cómo iniciar la conversación en un caso de accidente o emergencia.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">👋</div><div><div class="ma-incident-name">Saludo de Oro</div><div class="ma-incident-desc">"Hola! Recibimos tu reporte de accidente y lo más importante para nosotros ahora eres tú: ¿Te encuentras bien físicamente? ¿Necesitas algún tipo de apoyo médico o asistencia inmediata?"</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">🤝</div><div><div class="ma-incident-name">Empatía y Seguimiento</div><div class="ma-incident-desc">"Ok [Nombre], estamos aquí para apoyarte en todo el proceso. Cuéntanos: ¿Cómo quedó el vehículo? ¿Tienes alguna herida o golpe, por más leve que parezca? ¿Estás seguro de que no quieres que llame una ambulancia? Estoy atento. [Nombre], no estás solo en esta situación."</div></div></div>' +
+        '</div>'
+      },
+      {
+        ico: '🆘', titulo: 'ALERTA SOS',
+        sub: 'Protocolo cuando un conductor activa el botón de emergencia.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">🔴</div><div><div class="ma-incident-name">Plantilla SOS</div><div class="ma-incident-desc">"¡Hola! Hemos detectado que activaste el botón SOS. ¿Te encuentras en una situación de peligro o necesitas ayuda inmediata? Por favor, respóndenos por este medio. De no recibir respuesta en los próximos minutos, procederemos a contactarte vía telefónica para asegurar que estés a salvo."</div></div></div>' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">📞</div><div><div class="ma-incident-name">💡 Tip de Pro — Si pasan 10 minutos sin respuesta</div><div class="ma-incident-desc">Inicia la llamada así: "Hola, te hablo del equipo de Operaciones Ridery, vimos que activaste el botón de emergencia y queremos confirmar que estés bien..." → Dejar nota en el ticket que se comunicaron por señal telefónica.</div></div></div>' +
+        '</div>'
+      },
+      {
+        ico: '📄', titulo: 'SEGURO Y DOCUMENTOS',
+        sub: 'Qué explicar al conductor sobre la cobertura del seguro.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">🛡️</div><div><div class="ma-incident-name">Información de cobertura</div><div class="ma-incident-desc">"Si el vehículo sufrió daños o si tuviste gastos médicos, puedes optar por la cobertura del seguro. Para que el reembolso sea exitoso, es obligatorio que cumplas con esto: • Informe de Tránsito: Es indispensable que lo solicites en el sitio, sin esto el seguro no podrá proceder. • Facturas: Todos los gastos deben estar soportados por facturas legales a TU nombre."</div></div></div>' +
+        '</div>'
+      },
+      {
+        ico: '🔄', titulo: 'INSTRUCCIONES DE REACTIVACIÓN',
+        sub: 'Qué decir cuando el conductor necesita volver a la plataforma.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">✅</div><div><div class="ma-incident-name">Plantilla de reactivación</div><div class="ma-incident-desc">"Para garantizar que todo esté en orden y que puedas volver a las rutas con total seguridad, el siguiente paso es asistir a nuestras oficinas para una recertificación de tu vehículo."</div></div></div>' +
+        '</div>'
+      },
+      {
+        ico: '🚨', titulo: 'REPORTE DE ROBO O INCIDENTE DE SEGURIDAD',
+        sub: 'Cómo atender un conductor que reporta un robo.',
+        html: '<div class="ma-incident-list">' +
+          '<div class="ma-incident-item highlight"><div class="ma-incident-ico">🔴</div><div><div class="ma-incident-name">Plantilla de robo</div><div class="ma-incident-desc">"Disculpe [Nombre], antes que nada, ¿te encuentras en un lugar seguro ahora mismo? ¿Necesitas que contactemos a las autoridades por ti? ¿Puedes contarme qué está sucediendo?"</div></div></div>' +
+          '<div class="ma-incident-item"><div class="ma-incident-ico">⚡</div><div><div class="ma-incident-name">Tips de Oro para robos</div><div class="ma-incident-desc">• Velocidad de Respuesta: En robos o fallas, responde en menos de 2 minutos. El silencio genera pánico. • Confirmación de Ubicación: Siempre pide que confirmen si la ubicación de la app coincide con su ubicación real. • Cero Culpa: Nunca uses frases como "¿Por qué te metiste por ahí?" o "¿No revisaste el carro?". Mantén el enfoque en la solución.</div></div></div>' +
+        '</div>' +
+        '<div class="ma-tip">⚠️ Recordatorio Ninja: Incluso en estos casos extremos, ¡valida si es ECR! Si es un conductor de Emprende con Ridery, su flujo de seguridad es distinto y debes pasarlo a su cola especial de inmediato.</div>'
+      },
+    ]
   }
+
 };
+
+var maCurrentGuia = null;
 
 function maVerGuia(key) {
   var guia = MA_GUIAS[key];
   if (!guia) return;
+  maCurrentGuia = guia;
+
   document.getElementById('ma-viewer-title').textContent = guia.titulo;
-  var bodyHtml = guia.secciones.map(function(s) {
-    return '<div class="ma-guia-section">' +
-      '<div class="ma-guia-section-title">' + s.ico + ' ' + s.titulo + '</div>' +
-      '<div class="ma-guia-section-sub">' + s.sub + '</div>' +
-      s.html +
+
+  // Limpiar búsqueda
+  document.getElementById('ma-search-inp').value = '';
+  document.getElementById('ma-search-count').style.display = 'none';
+  document.getElementById('ma-search-clear').style.display = 'none';
+
+  // Construir índice
+  var indexHtml = guia.secciones.map(function(s, i) {
+    return '<div class="ma-index-item" onclick="maScrollTo(' + i + ')">' +
+      '<span class="ma-index-num">' + (i + 1) + '</span>' +
+      '<span class="ma-index-ico">' + s.ico + '</span>' +
+      '<span class="ma-index-label">' + s.titulo + '</span>' +
     '</div>';
   }).join('');
-  document.getElementById('ma-viewer-body').innerHTML = bodyHtml;
+  document.getElementById('ma-index-list').innerHTML = indexHtml;
+
+  // Construir secciones
+  var sectionsHtml = guia.secciones.map(function(s, i) {
+    return '<div class="ma-guia-section" id="ma-sec-' + i + '">' +
+      '<div class="ma-guia-section-title">' + s.ico + ' ' + s.titulo + '</div>' +
+      '<div class="ma-guia-section-sub">' + s.sub + '</div>' +
+      '<div class="ma-sec-content">' + s.html + '</div>' +
+    '</div>';
+  }).join('');
+  document.getElementById('ma-sections-container').innerHTML = sectionsHtml;
+
   document.getElementById('ma-viewer').style.display = 'block';
   document.getElementById('ma-viewer').scrollIntoView({behavior:'smooth', block:'start'});
-  // Hide grid
   document.querySelector('.ma-grid').style.display = 'none';
   document.querySelector('.ma-section-title').style.display = 'none';
 }
 
+function maScrollTo(idx) {
+  var el = document.getElementById('ma-sec-' + idx);
+  if (el) el.scrollIntoView({behavior: 'smooth', block: 'start'});
+}
+
+function maSearch() {
+  var q = document.getElementById('ma-search-inp').value.trim().toLowerCase();
+  var clearBtn = document.getElementById('ma-search-clear');
+  var countEl  = document.getElementById('ma-search-count');
+  var indexEl  = document.getElementById('ma-index');
+
+  clearBtn.style.display = q ? 'inline-block' : 'none';
+
+  if (!q) {
+    // Mostrar todo limpio
+    document.querySelectorAll('.ma-guia-section').forEach(function(sec) {
+      sec.classList.remove('ma-section-hidden');
+    });
+    // Restaurar texto original
+    if (maCurrentGuia) {
+      maCurrentGuia.secciones.forEach(function(s, i) {
+        var sec = document.getElementById('ma-sec-' + i);
+        if (!sec) return;
+        sec.querySelector('.ma-guia-section-title').innerHTML = s.ico + ' ' + s.titulo;
+        sec.querySelector('.ma-guia-section-sub').innerHTML   = s.sub;
+        sec.querySelector('.ma-sec-content').innerHTML        = s.html;
+      });
+    }
+    countEl.style.display = 'none';
+    indexEl.style.display = 'block';
+    return;
+  }
+
+  indexEl.style.display = 'none';
+  var visibles = 0;
+
+  if (maCurrentGuia) {
+    maCurrentGuia.secciones.forEach(function(s, i) {
+      var sec = document.getElementById('ma-sec-' + i);
+      if (!sec) return;
+
+      var hayMatch = (s.titulo.toLowerCase().includes(q)) ||
+                     (s.sub.toLowerCase().includes(q)) ||
+                     (s.html.toLowerCase().includes(q));
+
+      if (!hayMatch) {
+        sec.classList.add('ma-section-hidden');
+      } else {
+        sec.classList.remove('ma-section-hidden');
+        visibles++;
+        // Highlight en título y sub
+        sec.querySelector('.ma-guia-section-title').innerHTML = s.ico + ' ' + maHighlight(s.titulo, q);
+        sec.querySelector('.ma-guia-section-sub').innerHTML   = maHighlight(s.sub, q);
+        sec.querySelector('.ma-sec-content').innerHTML        = maHighlight(s.html, q);
+      }
+    });
+  }
+
+  countEl.style.display = 'inline';
+  countEl.textContent = visibles + ' resultado' + (visibles !== 1 ? 's' : '');
+
+  // Mostrar mensaje si no hay resultados
+  var noRes = document.getElementById('ma-no-results-msg');
+  if (!noRes) {
+    noRes = document.createElement('div');
+    noRes.id = 'ma-no-results-msg';
+    noRes.className = 'ma-no-results';
+    document.getElementById('ma-sections-container').appendChild(noRes);
+  }
+  noRes.style.display = visibles === 0 ? 'block' : 'none';
+  noRes.textContent = visibles === 0 ? '🔍 Sin resultados para "' + q + '"' : '';
+}
+
+function maHighlight(text, q) {
+  if (!q) return text;
+  var re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi');
+  return text.replace(re, '<mark class="ma-highlight">$1</mark>');
+}
+
+function maSearchClear() {
+  document.getElementById('ma-search-inp').value = '';
+  maSearch();
+}
+
 function maCloseViewer() {
   document.getElementById('ma-viewer').style.display = 'none';
+  document.getElementById('ma-search-inp').value = '';
+  document.getElementById('ma-search-count').style.display = 'none';
+  document.getElementById('ma-search-clear').style.display = 'none';
+  document.getElementById('ma-index').style.display = 'block';
   document.querySelector('.ma-grid').style.display = 'grid';
   document.querySelector('.ma-section-title').style.display = 'block';
 }
+
+// ═══════════════════════════════════════════
+//  MÓDULO: DISPONIBILIDAD ASPIRANTES
+// ═══════════════════════════════════════════
+// Columnas: moto, moto_b (baratica), carro_b (baratico), carro_e (económico), carro_p (premium), cam (camioneta)
+// Valor: número de cupos disponibles, null = sin datos / en construcción
+
+// Ciudades basadas en el archivo Oficinas_ciudades.xlsx
+// Columna A = Estado/Región (clave principal), Columna B = Subciudades que abarca
+var DA_DATA = {
+  'Distrito Capital / Miranda / La Guaira': { subcities: 'Caracas · Guarenas · Guatire · Los Teques · San Antonio · Cúa · Charallave · La Guaira', moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Aragua':        { subcities: 'Maracay · La Victoria',                                    moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Carabobo':      { subcities: 'Valencia · Pto. Cabello',                                  moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Lara':          { subcities: 'Barquisimeto',                                              moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Zulia':         { subcities: 'Maracaibo · Cabimas',                                      moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Nueva Esparta': { subcities: 'Margarita · Pampatar',                                     moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Anzoátegui':    { subcities: 'Puerto la Cruz · Lechería · El Tigre',                     moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Bolívar':       { subcities: 'Puerto Ordaz · Ciudad Guayana · Ciudad Bolívar',           moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Monagas':       { subcities: 'Maturín',                                                  moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Mérida':        { subcities: 'Mérida · El Vigía',                                        moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Barinas':       { subcities: 'Barinas',                                                  moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Táchira':       { subcities: 'San Cristóbal',                                            moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Portuguesa':    { subcities: 'Acarigua · Araure',                                        moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Falcón':        { subcities: 'Coro',                                                     moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+  'Sucre':         { subcities: 'Cumaná',                                                   moto: null, moto_b: null, carro_b: null, carro_e: null, carro_p: null, cam: null },
+};
+
+var DA_COLS = [
+  { key: 'moto',    label: '🏍️ MOTO',       thCls: 'da-th-moto'   },
+  { key: 'moto_b',  label: '🛵 MOTO\nBARAT.', thCls: 'da-th-moto-b' },
+  { key: 'carro_b', label: '🚗 CARRO\nBARAT.', thCls: 'da-th-carro-b' },
+  { key: 'carro_e', label: '🚙 CARRO\nECON.',  thCls: 'da-th-carro-e' },
+  { key: 'carro_p', label: '🚘 CARRO\nPREM.',  thCls: 'da-th-carro-p' },
+  { key: 'cam',     label: '🚐 CAMION.',       thCls: 'da-th-cam'    },
+];
+
+var daCurrentFilter = '';
+
+function daNumCell(val) {
+  if (val === null || val === undefined) {
+    return '<td><span class="da-num-cell pending">🚧</span></td>';
+  }
+  var cls = val > 0 ? 'has-val' : 'zero';
+  return '<td><span class="da-num-cell ' + cls + '">' + val + '</span></td>';
+}
+
+function daCityTotal(d) {
+  var t = 0;
+  DA_COLS.forEach(function(c) {
+    if (d[c.key] !== null && d[c.key] !== undefined) t += d[c.key];
+  });
+  return t;
+}
+
+function daBuildCard(city, data) {
+  var total = daCityTotal(data);
+  var colsHeader = DA_COLS.map(function(c) {
+    return '<th class="' + c.thCls + '">' + c.label.replace('\n','<br>') + '</th>';
+  }).join('');
+
+  var cells = DA_COLS.map(function(c) { return daNumCell(data[c.key]); }).join('');
+
+  var subcitiesHtml = data.subcities
+    ? '<div style="font-family:var(--font-secondary);font-size:.7rem;color:rgba(255,255,255,.45);font-weight:600;margin-top:3px;line-height:1.4">' + data.subcities + '</div>'
+    : '';
+
+  return '<div class="da-city-card" id="da-card-' + city.replace(/[\s\/]/g,'_') + '">' +
+    '<div class="da-city-head">' +
+      '<div>' +
+        '<span class="da-city-name">' + city.toUpperCase() + '</span>' +
+        subcitiesHtml +
+      '</div>' +
+      '<span class="da-city-ico">📍</span>' +
+    '</div>' +
+    '<div class="da-table-wrap">' +
+      '<table class="da-table">' +
+        '<thead><tr><th></th>' + colsHeader + '</tr></thead>' +
+        '<tbody>' +
+          '<tr><td style="font-family:var(--font-secondary);font-size:.7rem;color:var(--gris-4);font-weight:700">Cupos</td>' + cells + '</tr>' +
+        '</tbody>' +
+      '</table>' +
+    '</div>' +
+    '<div class="da-city-foot">' +
+      '<span class="da-total-label">Total cupos</span>' +
+      '<span class="da-total-num">' + total + '</span>' +
+    '</div>' +
+  '</div>';
+}
+
+function daRender(filter) {
+  var grid = document.getElementById('da-grid');
+  var empty = document.getElementById('da-empty');
+  var q = (filter || '').toLowerCase().trim();
+  var html = '';
+  var count = 0;
+  var totalCupos = 0;
+  var ciudadesConCupos = 0;
+  var cities = Object.keys(DA_DATA);
+
+  cities.forEach(function(city) {
+    var data = DA_DATA[city];
+    // Buscar en estado y en subciudades
+    if (q && !city.toLowerCase().includes(q) && !(data.subcities && data.subcities.toLowerCase().includes(q))) return;
+    html += daBuildCard(city, data);
+    count++;
+    var t = daCityTotal(data);
+    totalCupos += t;
+    if (t > 0) ciudadesConCupos++;
+  });
+
+  grid.innerHTML = html;
+  empty.style.display = count === 0 ? 'block' : 'none';
+
+  document.getElementById('da-total-ciudades').textContent = count;
+  document.getElementById('da-total-cupos').textContent = totalCupos;
+  document.getElementById('da-ciudades-activas').textContent = ciudadesConCupos;
+}
+
+function daBuildIndex() {
+  var pills = document.getElementById('da-index-pills');
+  var cities = Object.keys(DA_DATA);
+  pills.innerHTML = cities.map(function(city) {
+    return '<span class="da-index-pill" onclick="daJumpTo(\'' + city.replace(/'/g,"\\'") + '\')">' + city + '</span>';
+  }).join('');
+}
+
+function daJumpTo(city) {
+  var inp = document.getElementById('da-search');
+  inp.value = '';
+  document.getElementById('da-clear-btn').style.display = 'none';
+  daRender('');
+  setTimeout(function() {
+    var el = document.getElementById('da-card-' + city.replace(/[\s\/]/g,'_'));
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 80);
+}
+
+function daFilter(val) {
+  daCurrentFilter = val;
+  document.getElementById('da-clear-btn').style.display = val ? 'inline-block' : 'none';
+  daRender(val);
+}
+
+function daClear() {
+  document.getElementById('da-search').value = '';
+  document.getElementById('da-clear-btn').style.display = 'none';
+  daRender('');
+}
+
+function daInit() {
+  daBuildIndex();
+  daRender('');
+}
+
+// Init on load
+// (catInit already called in window.onload above)
 
 </script>
 </body>
